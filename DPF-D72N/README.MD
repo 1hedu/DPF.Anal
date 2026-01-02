@@ -7,7 +7,7 @@ Documentation index for the DPF-D72N digital picture frame firmware.
 The D72N uses the same dual-processor architecture as other MStar-based picture frames:
 
 ```
-MSPD21D SoC (assumed)
+MSPD2212B SoC
 ├── PM51 (8051 MCU) - Main application processor
 │   ├── UI/Menu logic, file system, storage drivers
 │   ├── Contains MDrv_*/HAL_* driver code (traced in D72N_DRIVERS.md)
