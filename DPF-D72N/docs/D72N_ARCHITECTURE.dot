@@ -1,0 +1,261 @@
+// D72N Architecture and Function Map
+// Graphviz DOT format
+// Render: dot -Tpng D72N_ARCHITECTURE.dot -o D72N_ARCHITECTURE.png
+// Or: dot -Tsvg D72N_ARCHITECTURE.dot -o D72N_ARCHITECTURE.svg
+
+digraph D72N_Architecture {
+    // Graph settings
+    rankdir=TB;
+    splines=ortho;
+    nodesep=0.5;
+    ranksep=0.8;
+    fontname="Helvetica";
+    node [fontname="Helvetica", fontsize=10];
+    edge [fontname="Helvetica", fontsize=9];
+
+    // Title
+    labelloc="t";
+    label="DPF-D72N Dual-Processor Architecture\nTraced from Firmware Analysis";
+    fontsize=14;
+
+    // Subgraph: 8051 MCU
+    subgraph cluster_8051 {
+        label="8051 MCU (PM51)";
+        style=filled;
+        fillcolor="#e3f2fd";
+        color="#1976d2";
+
+        // Library functions
+        subgraph cluster_lib {
+            label="Library (0x9xxx-0xBxxx)";
+            style=filled;
+            fillcolor="#bbdefb";
+
+            lib_read [label="lib_read_xdata\n0x9FCC (1827)", shape=box];
+            lib_write [label="lib_write_xdata\n0x9FD8 (1245)", shape=box];
+            lib_memcpy [label="lib_memcpy\n0x1193 (948)", shape=box];
+            lib_delay [label="lib_delay\n0xA783 (660)", shape=box];
+            lib_math [label="lib_math_*\n0x9E01-0x9E12", shape=box];
+        }
+
+        // Mailbox functions
+        subgraph cluster_mailbox {
+            label="Mailbox (Block 02)";
+            style=filled;
+            fillcolor="#c8e6c9";
+
+            MB_SendCommand [label="MB_SendCommand\n0x2830", shape=box];
+            MB_SelectJPEGCmd [label="MB_SelectJPEGCmd\n0x22F2", shape=box];
+            MB_ISR [label="MB_ISR_Warning\n0x0F6F", shape=box];
+        }
+
+        // Control functions
+        subgraph cluster_control {
+            label="Control (Blocks 01, 15, 16)";
+            style=filled;
+            fillcolor="#fff9c4";
+
+            AEON_Halt [label="AEON_Halt\n0x3D25", shape=box];
+            AEON_Resume [label="AEON_Resume\n0x3CDF", shape=box];
+            AEON_Enable [label="AEON_Enable\n0xD970", shape=box];
+            WDT_Disable [label="WDT_Disable\n0x1775", shape=box];
+            WDT_ReadState [label="WDT_ReadState\n0x2450", shape=box];
+            Bank_Switch [label="Bank_Switch\n0x1114", shape=box];
+        }
+
+        // Command dispatch
+        subgraph cluster_dispatch {
+            label="Dispatch (Common Code)";
+            style=filled;
+            fillcolor="#ffccbc";
+
+            BMP_DecodeMemOut [label="BMP_DecodeMemOut\n0xAC80 (cmd 0x10)", shape=box];
+            TIFF_StartDec [label="TIFF_StartDec\n0x4B07 (cmd 0x21)", shape=box];
+            TIFF_DecMemOut [label="TIFF_DecMemOut\n0x49BE (cmd 0x22)", shape=box];
+            JPEG_Enable [label="JPEG_Enable\n0xCACD", shape=box];
+            Display_Check [label="Display_CheckJPEG\n0xC5A9", shape=box];
+        }
+    }
+
+    // Shared memory interface
+    subgraph cluster_shared {
+        label="Shared Memory / Mailbox";
+        style=filled;
+        fillcolor="#f5f5f5";
+        color="#616161";
+
+        MB_JPEG [label="0x4401\nJPEG Mailbox", shape=ellipse, style=filled, fillcolor="#e8f5e9"];
+        MB_BMP [label="0x40BC\nBMP/TIFF Mailbox", shape=ellipse, style=filled, fillcolor="#e8f5e9"];
+        DRAM_Main [label="0x100000\nMain Buffer (888)", shape=ellipse, style=filled, fillcolor="#e3f2fd"];
+        DRAM_Sec [label="0x0C0000\nSecondary (673)", shape=ellipse, style=filled, fillcolor="#e3f2fd"];
+        DRAM_Out [label="0x150000\nOutput (384)", shape=ellipse, style=filled, fillcolor="#e3f2fd"];
+
+        XDATA_WDT [label="0x44CE\nWatchdog", shape=ellipse, style=filled, fillcolor="#fff3e0"];
+        XDATA_AEON [label="0x0FE6\nAEON Ctrl", shape=ellipse, style=filled, fillcolor="#fff3e0"];
+    }
+
+    // Subgraph: AEON R2
+    subgraph cluster_aeon {
+        label="AEON R2 (32-bit RISC)";
+        style=filled;
+        fillcolor="#fce4ec";
+        color="#c2185b";
+
+        // Mailbox handlers
+        subgraph cluster_mb_handlers {
+            label="Mailbox Handlers (0x4Cxxx)";
+            style=filled;
+            fillcolor="#f8bbd9";
+
+            MB_JPD_START [label="MB_JPD_CMD_MJPG_START_DEC\n0x4CF27", shape=box];
+            MB_JPD_DROP [label="MB_JPD_CMD_IMAGE_DROP\n0x4CEC5", shape=box];
+            MB_BMP_MEM [label="MB_BMP_CMD_DECODE_MEM_OUT\n0x4CFFC", shape=box];
+            MB_TIFF_HEAD [label="MB_TIFF_CMD_GET_HEAD_INF\n0x4D092", shape=box];
+            MB_TIFF_START [label="MB_TIFF_CMD_START_DEC\n0x4D0DB", shape=box];
+            MB_TIFF_MEM [label="MB_TIFF_CMD_DECODE_MEM_OUT\n0x4D11E", shape=box];
+        }
+
+        // JPEG/GIF decoder
+        subgraph cluster_jpeg_gif {
+            label="JPEG/GIF Decoder";
+            style=filled;
+            fillcolor="#d1c4e9";
+
+            JPG_GIF [label="JPG_GIF_Decoder\n0x4CE66", shape=box];
+            GIF_Enter [label="GIF_EnterDecoder\n0x4D5D4", shape=box];
+            GIF_Done [label="GIF_DecodeDone\n0x4D5EA", shape=box];
+        }
+
+        // LZW decoder
+        subgraph cluster_lzw {
+            label="LZW Decoder";
+            style=filled;
+            fillcolor="#b2dfdb";
+
+            TIFFInitLZW [label="TIFFInitLZW\n0x5E3E2", shape=box];
+            LZWPreDecode [label="LZWPreDecode\n0x5E44A", shape=box];
+            LZWSetup [label="LZWSetupDecode\n0x5E61D", shape=box];
+        }
+
+        // TIFF library
+        subgraph cluster_tiff {
+            label="libtiff (0x4Exxx-0x5Fxxx)";
+            style=filled;
+            fillcolor="#ffe0b2";
+
+            TIFFOpen [label="TIFFOpen\n0x5F2AA", shape=box];
+            TIFFReadDir [label="TIFFReadDirectory\n0x51483", shape=box];
+            TIFFReadStrip [label="TIFFReadEncodedStrip\n0x5EE8C", shape=box];
+            TIFFFillStrip [label="TIFFFillStrip\n0x5EEAE", shape=box];
+            TIFF_SendDone [label="TIFF_SendDone\n0x4EFF5", shape=box];
+        }
+
+        // Codecs
+        subgraph cluster_codecs {
+            label="Compression Codecs";
+            style=filled;
+            fillcolor="#e1bee7";
+
+            PackBits [label="PackBitsDecode\n0x5E8F4", shape=box];
+            NeXTDecode [label="NeXTDecode\n0x5E62D", shape=box];
+            ThunderDecode [label="ThunderDecode\n0x5F14B", shape=box];
+            Fax3 [label="Fax3Decode*\n0x519BC-0x519F8", shape=box];
+        }
+
+        // Thread/mutex
+        subgraph cluster_thread {
+            label="Threading";
+            style=filled;
+            fillcolor="#cfd8dc";
+
+            IdleThread [label="IdleThread\n0x5FEE7", shape=box];
+            MutexWait [label="AEON_MutexWait\n0x4E2F8", shape=box];
+        }
+    }
+
+    // Hardware registers
+    subgraph cluster_hw {
+        label="RIU Registers";
+        style=filled;
+        fillcolor="#efebe9";
+        color="#795548";
+
+        RIU_Bank [label="0x1019\nBank Select (237)", shape=parallelogram];
+        RIU_JPEG [label="0x1E6C, 0x1ECE/F\nJPEG Status", shape=parallelogram];
+        RIU_AEON [label="0x1F06, 0x1F09\nAEON Control", shape=parallelogram];
+    }
+
+    // 8051 internal connections
+    MB_SendCommand -> MB_JPEG [style=bold, color="#2e7d32"];
+    MB_SelectJPEGCmd -> MB_SendCommand;
+    BMP_DecodeMemOut -> MB_BMP [style=bold, color="#2e7d32"];
+    TIFF_StartDec -> MB_BMP [style=bold, color="#2e7d32"];
+    TIFF_DecMemOut -> MB_BMP [style=bold, color="#2e7d32"];
+
+    WDT_ReadState -> XDATA_WDT;
+    WDT_Disable -> XDATA_WDT;
+    AEON_Halt -> XDATA_AEON;
+    AEON_Resume -> XDATA_AEON;
+    AEON_Enable -> XDATA_AEON;
+
+    Bank_Switch -> RIU_Bank;
+    JPEG_Enable -> RIU_JPEG;
+    Display_Check -> RIU_JPEG;
+
+    lib_read -> lib_write [style=invis];
+    lib_write -> lib_memcpy [style=invis];
+
+    // Mailbox to AEON handlers
+    MB_JPEG -> MB_JPD_START [style=bold, color="#c2185b", label="cmd 0x02"];
+    MB_JPEG -> MB_JPD_DROP [style=dashed, color="#c2185b", label="cmd 0x06"];
+    MB_BMP -> MB_BMP_MEM [style=bold, color="#c2185b", label="cmd 0x10"];
+    MB_BMP -> MB_TIFF_HEAD [style=dashed, color="#c2185b", label="cmd 0x20"];
+    MB_BMP -> MB_TIFF_START [style=bold, color="#c2185b", label="cmd 0x21"];
+    MB_BMP -> MB_TIFF_MEM [style=bold, color="#c2185b", label="cmd 0x22"];
+
+    // AEON internal flows
+    MB_JPD_START -> JPG_GIF;
+    JPG_GIF -> GIF_Enter;
+    GIF_Enter -> GIF_Done;
+
+    MB_TIFF_HEAD -> TIFFOpen;
+    MB_TIFF_START -> TIFFReadDir;
+    TIFFOpen -> TIFFReadDir;
+    TIFFReadDir -> TIFFInitLZW;
+    TIFFInitLZW -> LZWPreDecode;
+    LZWPreDecode -> LZWSetup;
+
+    MB_TIFF_MEM -> TIFFReadStrip;
+    TIFFReadStrip -> TIFFFillStrip;
+    TIFFFillStrip -> TIFF_SendDone;
+
+    // Codec connections
+    TIFFReadStrip -> PackBits [style=dashed];
+    TIFFReadStrip -> NeXTDecode [style=dashed];
+    TIFFReadStrip -> ThunderDecode [style=dashed];
+    TIFFReadStrip -> Fax3 [style=dashed];
+    TIFFReadStrip -> LZWSetup [style=dashed];
+
+    // DRAM access
+    MB_BMP_MEM -> DRAM_Main [style=dotted, color="#1565c0"];
+    MB_TIFF_MEM -> DRAM_Main [style=dotted, color="#1565c0"];
+    TIFF_SendDone -> DRAM_Out [style=dotted, color="#1565c0"];
+    GIF_Done -> DRAM_Out [style=dotted, color="#1565c0"];
+
+    // Threading
+    IdleThread -> MutexWait [style=invis];
+
+    // Legend
+    subgraph cluster_legend {
+        label="Legend";
+        style=filled;
+        fillcolor="white";
+
+        leg1 [label="→ Solid: Primary flow", shape=plaintext];
+        leg2 [label="⇢ Dashed: Optional/conditional", shape=plaintext];
+        leg3 [label="⋯ Dotted: DRAM access", shape=plaintext];
+        leg4 [label="(N): Reference count", shape=plaintext];
+
+        leg1 -> leg2 -> leg3 -> leg4 [style=invis];
+    }
+}
