@@ -141,7 +141,7 @@ Base JPEG commands (INIT, ABORT, PAUSE, RESUME) likely exist but have no debug s
 | 0x4641 | 219 | Decode state |
 | 0x4542 | 194 | Extended state |
 
-See [D72N_VARIABLE_MAP.md](D72N_VARIABLE_MAP.md) for complete variable reference.
+See [D72N_VARIABLE_MAP.md](docs/D72N_VARIABLE_MAP.md) for complete variable reference.
 
 ### DRAM Buffer Layout (Traced from AEON)
 
@@ -151,7 +151,7 @@ See [D72N_VARIABLE_MAP.md](D72N_VARIABLE_MAP.md) for complete variable reference
 | 0x0C0000 | 673 | ~256KB | Secondary buffer |
 | 0x150000 | 384 | ~256KB | Output buffer |
 
-See [D72N_MEMORY_MAP.md](D72N_MEMORY_MAP.md) for complete memory layout.
+See [D72N_MEMORY_MAP.md](docs/D72N_MEMORY_MAP.md) for complete memory layout.
 
 ## Memory Layout
 
