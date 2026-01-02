@@ -67,29 +67,29 @@ Command bytes verified through 8051 code tracing of `/DPF-D72N/blocks/`:
 | Document | Status | Description |
 |----------|--------|-------------|
 | [D72N_REGISTER_MAP.md](docs/D72N_REGISTER_MAP.md) | Complete | RIU register reference (traced from all blocks) |
-| [D72N_MEMORY_MAP.md](D72N_MEMORY_MAP.md) | Complete | Flash/DRAM memory layout (traced) |
-| [D72N_VARIABLE_MAP.md](D72N_VARIABLE_MAP.md) | Complete | XDATA variable reference (132 addresses traced) |
-| [D72N_FUNCTION_MAP.md](D72N_FUNCTION_MAP.md) | Complete | Combined 8051+AEON function map (122 functions) |
-| [D72N_DRIVERS.md](D72N_DRIVERS.md) | Complete | Peripheral driver reference (traced from all blocks) |
-| [D72N_DISPLAY_PIPELINE.md](D72N_DISPLAY_PIPELINE.md) | Complete | Display subsystem (GE, GOP, OSDE, buffers) |
-| [D72N_BMP_DISPLAY_PIPELINE.md](D72N_BMP_DISPLAY_PIPELINE.md) | Complete | BMP decode for RCE (memory write paths) |
-| [D72N_PERIPHERAL_MAP.md](D72N_PERIPHERAL_MAP.md) | Complete | RIU banks, I2C, GPIO, timers |
-| [D72N_ARCHITECTURE.dot](D72N_ARCHITECTURE.dot) | Complete | Graphviz architecture diagram |
+| [D72N_MEMORY_MAP.md](docs/D72N_MEMORY_MAP.md) | Complete | Flash/DRAM memory layout (traced) |
+| [D72N_VARIABLE_MAP.md](docs/D72N_VARIABLE_MAP.md) | Complete | XDATA variable reference (132 addresses traced) |
+| [D72N_FUNCTION_MAP.md](docs/D72N_FUNCTION_MAP.md) | Complete | Combined 8051+AEON function map (122 functions) |
+| [D72N_DRIVERS.md](docs/D72N_DRIVERS.md) | Complete | Peripheral driver reference (traced from all blocks) |
+| [D72N_DISPLAY_PIPELINE.md](docs/D72N_DISPLAY_PIPELINE.md) | Complete | Display subsystem (GE, GOP, OSDE, buffers) |
+| [D72N_BMP_DISPLAY_PIPELINE.md](docs/D72N_BMP_DISPLAY_PIPELINE.md) | Complete | BMP decode for RCE (memory write paths) |
+| [D72N_PERIPHERAL_MAP.md](docs/D72N_PERIPHERAL_MAP.md) | Complete | RIU banks, I2C, GPIO, timers |
+| [D72N_ARCHITECTURE.dot](docs/D72N_ARCHITECTURE.dot) | Complete | Graphviz architecture diagram |
 
 ### Protocol & Control
 
 | Document | Status | Description |
 |----------|--------|-------------|
-| [D72N_SERDB_CONTROL.md](D72N_SERDB_CONTROL.md) | Complete | SERDB control reference with XDATA/DRAM maps |
-| [D72N_MAILBOX_PROTOCOL.md](D72N_MAILBOX_PROTOCOL.md) | Complete | 8051↔AEON mailbox IPC (traced from block 02) |
-| [D72N_COMMAND_DISPATCH.md](D72N_COMMAND_DISPATCH.md) | Complete | JPEG/BMP/TIFF command dispatch (all blocks traced) |
-| [D72N_WATCHDOG_CONTROL.md](D72N_WATCHDOG_CONTROL.md) | Complete | Watchdog disable via SERDB (traced from blocks 15, 16) |
-| [D72N_SECURITY_BYPASS.md](D72N_SECURITY_BYPASS.md) | Complete | Security features and bypass via SERDB |
-| [D72N_INTERNAL_STRUCTURES.md](D72N_INTERNAL_STRUCTURES.md) | Complete | LZW, FAT, timers, cache, mutex subsystems |
-| [D72N_AEON_CONTROL.md](D72N_AEON_CONTROL.md) | Complete | AEON halt/reset/resume via SERDB |
-| [D72N_UART_SWITCH.md](D72N_UART_SWITCH.md) | Complete | UART mux control (8051 ↔ AEON) |
-| [D72N_SECURITY_ANALYSIS.md](D72N_SECURITY_ANALYSIS.md) | Complete | Vulnerability analysis (LZW, TIFF, memory write) |
-| [D72N_MB_BMP_DECODE_MEM_OUT.md](D72N_MB_BMP_DECODE_MEM_OUT.md) | Complete | BMP decode-to-memory function trace |
+| [D72N_SERDB_CONTROL.md](docs/D72N_SERDB_CONTROL.md) | Complete | SERDB control reference with XDATA/DRAM maps |
+| [D72N_MAILBOX_PROTOCOL.md](docs/D72N_MAILBOX_PROTOCOL.md) | Complete | 8051↔AEON mailbox IPC (traced from block 02) |
+| [D72N_COMMAND_DISPATCH.md](docs/D72N_COMMAND_DISPATCH.md) | Complete | JPEG/BMP/TIFF command dispatch (all blocks traced) |
+| [D72N_WATCHDOG_CONTROL.md](docs/D72N_WATCHDOG_CONTROL.md) | Complete | Watchdog disable via SERDB (traced from blocks 15, 16) |
+| [D72N_SECURITY_BYPASS.md](docs/D72N_SECURITY_BYPASS.md) | Complete | Security features and bypass via SERDB |
+| [D72N_INTERNAL_STRUCTURES.md](docs/D72N_INTERNAL_STRUCTURES.md) | Complete | LZW, FAT, timers, cache, mutex subsystems |
+| [D72N_AEON_CONTROL.md](docs/D72N_AEON_CONTROL.md) | Complete | AEON halt/reset/resume via SERDB |
+| [D72N_UART_SWITCH.md](vD72N_UART_SWITCH.md) | Complete | UART mux control (8051 ↔ AEON) |
+| [D72N_SECURITY_ANALYSIS.md](docs/D72N_SECURITY_ANALYSIS.md) | Complete | Vulnerability analysis (LZW, TIFF, memory write) |
+| [D72N_MB_BMP_DECODE_MEM_OUT.md](docs/D72N_MB_BMP_DECODE_MEM_OUT.md) | Complete | BMP decode-to-memory function trace |
 
 ### Python Tools
 
@@ -191,7 +191,7 @@ The D72N AEON directly accesses hardware via RIU (Register Interface Unit):
 | 0x1A | Unknown | 18 | Unidentified |
 | 0x17 | Unknown | 17 | Unidentified |
 
-See [D72N_REGISTER_MAP.md](D72N_REGISTER_MAP.md) for complete register details.
+See [D72N_REGISTER_MAP.md](docs/D72N_REGISTER_MAP.md) for complete register details.
 
 ### Cache Control
 
