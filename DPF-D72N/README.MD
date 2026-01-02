@@ -66,7 +66,7 @@ Command bytes verified through 8051 code tracing of `/DPF-D72N/blocks/`:
 
 | Document | Status | Description |
 |----------|--------|-------------|
-| [D72N_REGISTER_MAP.md](D72N_REGISTER_MAP.md) | Complete | RIU register reference (traced from all blocks) |
+| [D72N_REGISTER_MAP.md](docs/D72N_REGISTER_MAP.md) | Complete | RIU register reference (traced from all blocks) |
 | [D72N_MEMORY_MAP.md](D72N_MEMORY_MAP.md) | Complete | Flash/DRAM memory layout (traced) |
 | [D72N_VARIABLE_MAP.md](D72N_VARIABLE_MAP.md) | Complete | XDATA variable reference (132 addresses traced) |
 | [D72N_FUNCTION_MAP.md](D72N_FUNCTION_MAP.md) | Complete | Combined 8051+AEON function map (122 functions) |
