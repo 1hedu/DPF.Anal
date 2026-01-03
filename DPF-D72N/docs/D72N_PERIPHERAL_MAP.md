@@ -35,7 +35,7 @@ DPF-D72N SoC (MSPD21D assumed)
 |------|------|---------------|---------|
 | 0x10 | 1505 | 01 (110 refs) | CHIPTOP - System control |
 | 0x11 | 149 | 15 (10 refs) | System misc |
-| 0x12 | 269 | 01 (135 refs) | BDMA - Block DMA |
+| 0x12 | 269 | 01 (135 refs) | BDMA - Byte DMA |
 | 0x2B | 912 | 01 (71 refs) | System extended |
 | 0x31 | 90 | All blocks | System config |
 
